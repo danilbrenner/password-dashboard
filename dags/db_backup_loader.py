@@ -1,7 +1,11 @@
+import os
+import tempfile
 
-def get_latest_backup():
+tmp_dir = tempfile.gettempdir()
+sqlite_file_name = "current_backup.sqlite"
+
+def download_backup():
     from azure.storage.blob import ContainerClient, BlobClient
-    import os
 
     conn_str = os.environ.get("BACKUP_AZURE_STORAGE_CONNECTION_STRING")
     container_name = os.environ.get("BACKUP_AZURE_STORAGE_CONTAINER")
@@ -26,14 +30,30 @@ def get_latest_backup():
         blob_name=latest_blob.name
     )
 
-    download_file_path = "./current_backup.sqlite"
-
-    if os.path.exists(download_file_path):
-        os.remove(download_file_path)
+    download_file_path = os.path.join(tmp_dir, sqlite_file_name)
 
     with open(download_file_path, "wb") as file:
         download_stream = blob_client.download_blob()
         file.write(download_stream.readall())
 
-    print(f"✅ Downloaded latest backup: {latest_blob.name} to {download_file_path}")
+    print(f"Downloaded latest backup: {latest_blob.name} to {download_file_path}")
     return download_file_path
+
+def load_backup():
+    import sqlite3
+    import pandas as pd
+    from sqlalchemy import create_engine
+
+    sqlite_path = os.path.join(tmp_dir, sqlite_file_name)
+    pg_conn_string = os.environ.get("PASSWORD_DASHBOARD_DB")
+    pg_schema = "raw"
+    tables = [ "sync_events", "logins" ]
+
+    sqlite_conn = sqlite3.connect(sqlite_path)
+    pg_engine = create_engine(pg_conn_string)
+
+    for table in tables:
+        print(f"Copying table: {table}")
+        df = pd.read_sql_query(f"SELECT * FROM {table}", sqlite_conn)
+        df.to_sql(table, pg_engine, schema=pg_schema, if_exists='replace', index=False)
+
