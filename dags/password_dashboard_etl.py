@@ -3,8 +3,8 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime
 
 from db_migrations import run_db_migrations
-from get_latest_backup import get_latest_backup
-from load_data import load_data
+from db_backup_loader import load_backup, download_backup
+from additional_data_loader import load_additional_data, download_additional_data
 
 with DAG(
     dag_id='password_dashboard_etl',
@@ -19,16 +19,28 @@ with DAG(
         op_kwargs={'name': 'Airflow'}
     )
 
-    get_latest_backup = PythonOperator(
-        task_id='get_latest_backup',
-        python_callable=get_latest_backup,
+    download_backup = PythonOperator(
+        task_id='download_backup',
+        python_callable=download_backup,
         op_kwargs={'name': 'Airflow'}
     )
 
-    copy_data = PythonOperator(
-        task_id='copy_data',
-        python_callable=load_data,
+    load_backup_data = PythonOperator(
+        task_id='load_backup_data',
+        python_callable=load_backup,
         op_kwargs={'name': 'Airflow'}
     )
 
-    run_db_migrations_task >> get_latest_backup >> copy_data
+    download_additional_data = PythonOperator(
+        task_id='download_additional_data',
+        python_callable=download_additional_data,
+        op_kwargs={'name': 'Airflow'}
+    )
+
+    load_additional_data = PythonOperator(
+        task_id='load_additional_data',
+        python_callable=load_additional_data,
+        op_kwargs={'name': 'Airflow'}
+    )
+
+    run_db_migrations_task >> download_additional_data >> load_additional_data >> download_backup >> load_backup_data
