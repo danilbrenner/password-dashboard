@@ -5,6 +5,7 @@ from datetime import datetime
 from db_migrations import run_db_migrations
 from db_backup_loader import load_backup, download_backup
 from additional_data_loader import load_additional_data, download_additional_data
+from data_transfromation import transform_data
 
 with DAG(
     dag_id='password_dashboard_etl',
@@ -43,4 +44,18 @@ with DAG(
         op_kwargs={'name': 'Airflow'}
     )
 
-    run_db_migrations_task >> download_additional_data >> load_additional_data >> download_backup >> load_backup_data
+    transform_data_step = PythonOperator(
+        task_id='transform_data',
+        python_callable=transform_data,
+        op_kwargs={'name': 'Airflow'}
+    )
+
+    (
+            run_db_migrations_task
+            >> download_additional_data
+            >> load_additional_data
+            >> download_backup
+            >> load_backup_data
+            >> transform_data_step
+    )
+

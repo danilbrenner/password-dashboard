@@ -55,5 +55,5 @@ def load_backup():
     for table in tables:
         print(f"Copying table: {table}")
         df = pd.read_sql_query(f"SELECT * FROM {table}", sqlite_conn)
-        df.to_sql(table, pg_engine, schema=pg_schema, if_exists='replace', index=False)
+        df.to_sql(table, pg_engine, schema=pg_schema, if_exists='append', index=False)
 
