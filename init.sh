@@ -7,6 +7,7 @@ docker compose run webserver airflow db init
 echo "2. Create Password Dashboard DB"
 
 docker compose exec postgres psql -U postgres -d postgres -c "CREATE DATABASE password_dashboard;"
+docker compose exec postgres psql -U postgres -d postgres -c "CREATE DATABASE metabase;"
 
 echo "3. Create Airflow user"
 

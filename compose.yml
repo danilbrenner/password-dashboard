@@ -7,10 +7,20 @@ services:
     ports:
       - "5432:5432" 
 
+  metabase:
+    image: metabase/metabase:v0.49.4
+    platform: linux/amd64
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
   webserver:
     build:
       context: .
-      dockerfile: airflow/Dockerfile
+      dockerfile: ./airflow/Dockerfile
     image: custom-airflow:2.8.0
     depends_on:
       - postgres
