@@ -8,17 +8,15 @@ def download_additional_data():
     from azure.storage.blob import ContainerClient, BlobClient
 
     conn_str = os.environ.get("BACKUP_AZURE_STORAGE_CONNECTION_STRING")
-    # container_name = os.environ.get("BACKUP_AZURE_STORAGE_CONTAINER")
+    container_name = os.environ.get("DATA_AZURE_STORAGE_CONTAINER")
 
-    if conn_str is None: # or container_name is None:
+    if conn_str is None or container_name is None:
         raise ValueError("Backup azure storage must be set")
-
-    # container_client = ContainerClient.from_connection_string(conn_str, container_name)
 
     for file_name in files:
         blob_client = BlobClient.from_connection_string(
             conn_str=conn_str,
-            container_name="data",
+            container_name=container_name,
             blob_name=file_name
         )
         print(f"Loading file {file_name}")
@@ -39,4 +37,4 @@ def load_additional_data():
         table = file_name.split(".")[0]
         print(f"Loading {file_name} into {table}...")
         df = pd.read_csv(os.path.join(tmp_dir, file_name))
-        df.to_sql(table, pg_engine, schema=pg_schema, if_exists='replace', index=False)
+        df.to_sql(table, pg_engine, schema=pg_schema, if_exists='append', index=False)
