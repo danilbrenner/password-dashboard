@@ -1,7 +1,7 @@
 
 
 def transform_data():
-    from sqlalchemy import create_engine
+    from sqlalchemy import create_engine, text
     from sqlalchemy.orm import sessionmaker
     import os
 
@@ -11,8 +11,8 @@ def transform_data():
     session = session_delegate()
 
     try:
-        session.execute("call mart.sync_dim_logins()")
-        session.execute("call mart.sync_snapshots()")
+        session.execute(text("call mart.sync_dim_logins()"))
+        session.execute(text("call mart.sync_snapshots()"))
         session.commit()
     except Exception as e:
         session.rollback()
