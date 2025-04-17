@@ -5,7 +5,7 @@ def run_db_migrations():
     database_url = os.environ.get("PASSWORD_DASHBOARD_DB")
     backend = get_backend(database_url)
 
-    migrations = read_migrations("migrations")
+    migrations = read_migrations("/app/migrations")
 
     with backend.lock():
         backend.apply_migrations(backend.to_apply(migrations))
