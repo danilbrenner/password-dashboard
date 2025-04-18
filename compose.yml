@@ -4,18 +4,25 @@ services:
     container_name: postgres
     env_file:
       - .env
+    environment:
+      POSTGRES_DB: password_dashboard
     ports:
       - "5432:5432"
 
-  metabase:
-    image: metabase/metabase:v0.49.4
-    platform: linux/amd64
-    ports:
-      - "3000:3000"
+  superset:
+    image: superset:local
+    build:
+      context: .
+      dockerfile: ./superset/Dockerfile
     env_file:
       - .env
-    depends_on:
-      - postgres
+    ports:
+      - "8088:8088"
+    command: >
+      /bin/bash -c "superset db upgrade &&
+      superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@superset.com --password admin &&
+      superset init &&
+      superset run -h 0.0.0.0 -p 8088 --with-threads --reload --debugger"
 
   pipeline:
     image: pipeline:local

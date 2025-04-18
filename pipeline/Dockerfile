@@ -9,7 +9,7 @@ COPY pipeline/requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY ./flow /app/flow
+COPY ./pipeline/flow /app/flow
 
 COPY ./migrations /app/migrations
 
