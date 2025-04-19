@@ -7,26 +7,27 @@ def my_etl():
     from additional_data_loader import load_additional_data
     from data_transfromation import transform_data
     from db_backup_loader import load_backup
+    from datetime import datetime
 
-    print("Running DB migrations...")
+    print(f"{datetime.now()}: Running DB migrations...")
     run_db_migrations()
 
-    print("Downloading backup...")
+    print(f"{datetime.now()}: Downloading backup...")
     download_backup()
 
-    print("Loading backup...")
+    print(f"{datetime.now()}:Loading backup...")
     load_backup()
 
-    print("Downloading additional data...")
+    print(f"{datetime.now()}:Downloading additional data...")
     download_additional_data()
 
-    print("Loading additional data...")
+    print(f"{datetime.now()}: Loading additional data...")
     load_additional_data()
 
-    print("Transforming data...")
+    print(f"{datetime.now()}: Transforming data...")
     transform_data()
 
-    print("Pipeline completed successfully.")
+    print(f"{datetime.now()}: Pipeline completed successfully.")
 
 if __name__ == "__main__":
     my_etl()

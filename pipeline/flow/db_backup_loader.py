@@ -42,7 +42,7 @@ def download_backup():
 def load_backup():
     import sqlite3
     import pandas as pd
-    from sqlalchemy import create_engine
+    from sqlalchemy import create_engine, text
 
     sqlite_path = os.path.join(tmp_dir, sqlite_file_name)
     pg_conn_string = os.environ.get("PASSWORD_DASHBOARD_DB")
@@ -51,6 +51,10 @@ def load_backup():
 
     sqlite_conn = sqlite3.connect(sqlite_path)
     pg_engine = create_engine(pg_conn_string)
+
+    with pg_engine.begin() as conn:
+        for table in list(reversed(tables)):
+            conn.execute(text(f"TRUNCATE TABLE {pg_schema}.{table};"))
 
     for table in tables:
         print(f"Copying table: {table}")

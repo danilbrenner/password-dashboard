@@ -26,12 +26,17 @@ def download_additional_data():
 
 def load_additional_data():
     import pandas as pd
-    from sqlalchemy import create_engine
+    from sqlalchemy import create_engine, text
 
     pg_conn_string = os.environ.get("PASSWORD_DASHBOARD_DB")
     pg_schema = "raw"
 
     pg_engine = create_engine(pg_conn_string)
+
+    with pg_engine.begin() as conn:
+        for file_name in files:
+            table = file_name.split(".")[0]
+            conn.execute(text(f"TRUNCATE TABLE {pg_schema}.{table};"))
 
     for file_name in files:
         table = file_name.split(".")[0]
