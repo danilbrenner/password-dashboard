@@ -19,8 +19,6 @@ services:
     ports:
       - "8080:8080"
     command: webserver
-    networks:
-      - my-shared-net
 
   scheduler:
     image: custom-airflow:local
@@ -32,5 +30,3 @@ services:
       - ./dags:/opt/airflow/dags
       - ./migrations:/opt/airflow/migrations
     command: scheduler
-    networks:
-      - my-shared-net
