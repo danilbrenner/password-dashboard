@@ -1,1 +1,0 @@
-select current_date - snapshot_ts::date as days from mart.dim_snapshots order by snapshot_ts desc limit 1;
