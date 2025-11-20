@@ -1,5 +1,0 @@
-yoyo-migrations
-azure-storage-blob
-pandas
-sqlalchemy
-psycopg2-binary
