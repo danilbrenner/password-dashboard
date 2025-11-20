@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: raw_azure
+    meta:
+      # DuckDB will substitute {name} with the table name ("passwords" / "names")
+#      external_location: "az://myaccount.blob.core.windows.net/mycontainer/src/*/{name}.csv"
+      external_location: "https://{{ env_var('AZURE_ACCOUNT') }}.blob.core.windows.net/{{ env_var('AZURE_CONTAINER') }}/src/*/{name}.csv"
+    tables:
+      - name: passwords
+        description: "All passwords CSVs under src/*/passwords.csv"
+      - name: names
+        description: "All names CSVs under src/*/names.csv"

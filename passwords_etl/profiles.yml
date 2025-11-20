@@ -1,0 +1,13 @@
+passwords_etl:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: /Users/danil/dbs/passwords.duckdb
+      schema: main
+      threads: 4
+      extensions:
+        - azure
+        - httpfs
+      settings:
+        azure_storage_connection_string: "{{ env_var('DBT_ENV_SECRET_STORAGE_CONNECTION_STRING') }}"
