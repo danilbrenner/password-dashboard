@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    meta:
+      external_location: "azure://password-dashboard/*/{name}.csv"
+    tables:
+      - name: logins
+        description: "All passwords CSVs under src/*/logins.csv"
+      - name: mp
+        description: "All names CSVs under src/*/mp.csv"

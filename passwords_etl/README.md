@@ -2,10 +2,16 @@ Welcome to your new dbt project!
 
 ### Using the starter project
 
+Initialize your project by:
+
+```shell
+export STORAGE_CONNECTION_STRING="<your-connection-string>" 
+dbt run-operation init_db
+```
+
 Try running the following commands:
 - dbt run
 - dbt test
-
 
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
