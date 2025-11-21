@@ -1,0 +1,11 @@
+passwords_etl:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: /Users/danil/dbs/passwords.duckdb
+      schema: main
+      threads: 1
+      extensions:
+        - azure
+        - httpfs

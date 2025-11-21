@@ -1,0 +1,28 @@
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'passwords_etl'
+version: '1.0.0'
+
+profile: 'passwords_etl'
+
+model-paths: [ "models" ]
+analysis-paths: [ "analyses" ]
+test-paths: [ "tests" ]
+seed-paths: [ "seeds" ]
+macro-paths: [ "macros" ]
+snapshot-paths: [ "snapshots" ]
+
+clean-targets: # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+models:
+  passwords_etl:
+    raw:
+      +schema: raw
+    staging:
+      +schema: staging
+
+on-run-start:
+  - "{{ log('Starting passwords_etl project', info=True) }}"
