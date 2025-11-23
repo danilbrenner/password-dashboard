@@ -8,5 +8,19 @@ sources:
     tables:
       - name: logins
         description: "All passwords CSVs under src/*/logins.csv"
+        columns:
+          - name: id
+            description: "Unique id for the login record (as provided in the source CSV)"
+          - name: name
+            description: "Display name or site name for the login entry"
+          - name: username
+            description: "Username associated with the login entry"
+          - name: changedat
+            description: "Timestamp string from source indicating when the password was changed (raw field; models may alias to changed_at)"
+          - name: strength
+            description: "Password strength metric or label from the source CSV"
       - name: mp
         description: "All names CSVs under src/*/mp.csv"
+        columns:
+          - name: hash
+            description: "Master password hash or identifier from the source CSV"

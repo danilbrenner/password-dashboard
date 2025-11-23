@@ -8,7 +8,10 @@ select id,
        username,
        changed_at,
        strength,
-       export_ts 
+       strptime(
+               regexp_extract(filename, '([0-9]{14})'),
+               '%Y%m%d%H%M%S'
+       ) as export_ts
 from {{ref('raw_logins')}}
 {% if is_incremental() %}
     where export_ts > (select max(export_ts) from {{ this }})

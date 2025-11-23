@@ -1,0 +1,23 @@
+unit_tests:
+  - name: test_fact_exchange_sessions_counts
+    model: fact_exchange_sessions
+
+    given:
+      - input: ref('stg_in_master_passwords')
+        rows:
+          - { export_ts: "2025-10-12 15:45:36" }
+          - { export_ts: "2025-11-01 12:00:00" }
+      - input: ref('stg_in_logins')
+        rows:
+          - { id: "851f5f8f-d212-6c43-ff93-bb301c424bf4", export_ts: "2025-10-12 15:45:36" }
+          - { id: "c3f00e17-c182-83d9-a027-e32ac5a27bd3", export_ts: "2025-11-01 12:00:00" }
+          - { id: "00000000-0000-0000-0000-000000000000", export_ts: "2025-10-12 15:45:36" }
+
+    expect:
+      rows:
+        - { export_ts: "2025-10-12 15:45:36", session_type: "master_password", count: 1 }
+        - { export_ts: "2025-11-01 12:00:00", session_type: "master_password", count: 1 }
+        - { export_ts: "2025-10-12 15:45:36", session_type: "login", count: 2 }
+        - { export_ts: "2025-11-01 12:00:00", session_type: "login", count: 1 }
+
+

@@ -11,8 +11,5 @@ select id,
        username,
        changedat as changed_at,
        strength,
-       strptime(
-               regexp_extract(filename, '([0-9]{14})'),
-               '%Y%m%d%H%M%S'
-       )         as export_ts
+       filename
 from raw_logins
