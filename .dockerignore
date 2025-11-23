@@ -1,0 +1,21 @@
+# Git and virtual environment
+.git
+.venv
+.idea
+__pycache__
+*.pyc
+
+# Local data and logs
+passwords_etl/logs/
+passwords_etl/target/
+passwords_etl/passwords.duckdb
+passwords_etl/passwords.duckdb.wal
+logs/
+.DS_Store
+
+# Dagster temp files
+.tmp_dagster_home*
+
+# Local user files
+passwords_etl/.user.yml
+
