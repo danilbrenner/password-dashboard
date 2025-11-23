@@ -1,0 +1,36 @@
+unit_tests:
+  - name: test_dim_logins_distinct_and_columns
+    model: dim_logins
+
+    given:
+      - input: ref('stg_in_logins')
+        rows:
+          - {
+            id: "851f5f8f-d212-6c43-ff93-bb301c424bf4",
+            name: "Alice",
+            username: "alice@example.com"
+          }
+          - {
+            id: "851f5f8f-d212-6c43-ff93-bb301c424bf4",
+            name: "Alice",
+            username: "alice@example.com"
+          }
+          - {
+            id: "c3f00e17-c182-83d9-a027-e32ac5a27bd3",
+            name: "Bob",
+            username: "bob@example.com"
+          }
+
+    expect:
+      rows:
+        - {
+          login_id: "851f5f8f-d212-6c43-ff93-bb301c424bf4",
+          name: "Alice",
+          username: "alice@example.com"
+        }
+        - {
+          login_id: "c3f00e17-c182-83d9-a027-e32ac5a27bd3",
+          name: "Bob",
+          username: "bob@example.com"
+        }
+
