@@ -1,3 +1,22 @@
+models:
+  - name: stg_in_logins
+    description: "Staging table for login records with parsed export timestamp"
+    tests:
+      - accepted_values:
+          arguments:
+            column_name: strength
+            values: [ "VeryWeak", "Weak", "Moderate", "Strong", "VeryStrong" ]
+    columns:
+      - name: id
+        tests:
+          - not_null
+      - name: strength
+        tests:
+          - not_null
+      - name: export_ts
+        tests:
+          - not_null
+
 unit_tests:
   - name: test_stg_in_logins_export_ts_parsing
     model: stg_in_logins
