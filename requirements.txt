@@ -1,1 +1,5 @@
 dbt-duckdb==1.10.0
+dagster-webserver==1.12.3
+dagster-dbt==0.28.3
+dagster-duckdb==0.28.3
+dagster-dbt[cli]
