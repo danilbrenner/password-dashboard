@@ -3,7 +3,7 @@ passwords_etl:
   outputs:
     dev:
       type: duckdb
-      path: /Users/danil/dbs/passwords.duckdb
+      path: ./passwords.duckdb
       schema: main
       threads: 1
       extensions:

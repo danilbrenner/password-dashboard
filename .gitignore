@@ -8,3 +8,4 @@ __pycache__/
 
 logs
 passwords_etl/.user.yml
+passwords_etl/passwords.duckdb
