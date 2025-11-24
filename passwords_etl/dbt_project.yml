@@ -18,6 +18,8 @@ clean-targets: # directories to be removed by `dbt clean`
   - "dbt_packages"
 
 models:
+  +pre-hook:
+    - "SET azure_transport_option_type='curl';"
   passwords_etl:
     raw:
       +schema: raw
