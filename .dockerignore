@@ -12,6 +12,7 @@ passwords_etl/passwords.duckdb
 passwords_etl/passwords.duckdb.wal
 logs/
 .DS_Store
+output/
 
 # Dagster temp files
 .tmp_dagster_home*

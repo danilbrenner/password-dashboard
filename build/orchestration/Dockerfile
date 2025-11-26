@@ -7,7 +7,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY orchestration ./orchestration
+COPY passwords_etl ./passwords_etl
 
 WORKDIR /app/passwords_etl
 

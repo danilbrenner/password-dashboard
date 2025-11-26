@@ -1,0 +1,23 @@
+services:
+  bi:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./build/bi/Dockerfile
+    container_name: bi
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./output:/warehouse
+    restart: unless-stopped
+
+  orchestration:
+    build:
+      context: .
+      dockerfile: ./build/orchestration/Dockerfile
+    container_name: orchestration
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./output:/warehouse
+    restart: unless-stopped
