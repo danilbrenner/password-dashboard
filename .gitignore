@@ -12,3 +12,4 @@ passwords_etl/passwords.duckdb
 
 # Dagster temporary files
 *.tmp_dagster_home_*
+output
