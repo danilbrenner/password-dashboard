@@ -15,7 +15,7 @@ from .assets import dbt_resource, dbt_project_assets
 
 # Paths for your DuckDB file
 SOURCE_PATH = "../../passwords_etl/passwords.duckdb"
-TARGET_PATH = "../../output/analytics.duckdb"
+TARGET_PATH = "/warehouse/analytics.duckdb"
 
 
 # This asset runs *after* all dbt assets and copies the DuckDB file
@@ -47,7 +47,7 @@ defs = Definitions(
     schedules=[
         ScheduleDefinition(
             name="nightly_materialization",
-            cron_schedule="0 13 * * *", 
+            cron_schedule="0 19 * * *", 
             job=materialize_dbt_and_copy,
         )
     ],
