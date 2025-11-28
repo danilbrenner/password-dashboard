@@ -28,7 +28,7 @@ unit_tests:
             id: "851f5f8f-d212-6c43-ff93-bb301c424bf4",
             name: "Alice",
             username: "alice@example.com",
-            changed_at: "2025-10-10 10:00:00",
+            changed_at: "10/10/2025 10:00:00",
             strength: 80,
             filename: "azure://password-dashboard/20251012154536/logins.csv"
           }
@@ -36,7 +36,7 @@ unit_tests:
             id: "c3f00e17-c182-83d9-a027-e32ac5a27bd3",
             name: "Bob",
             username: "bob@example.com",
-            changed_at: "2025-11-01 08:30:00",
+            changed_at: "10/10/2025 10:00:00",
             strength: 50,
             filename: "azure://password-dashboard/20251101120000/logins.csv"
           }
@@ -47,7 +47,6 @@ unit_tests:
           id: "851f5f8f-d212-6c43-ff93-bb301c424bf4",
           name: "Alice",
           username: "alice@example.com",
-          changed_at: "2025-10-10 10:00:00",
           strength: 80,
           export_ts: "2025-10-12 15:45:36"
         }
@@ -55,11 +54,56 @@ unit_tests:
           id: "c3f00e17-c182-83d9-a027-e32ac5a27bd3",
           name: "Bob",
           username: "bob@example.com",
-          changed_at: "2025-11-01 08:30:00",
           strength: 50,
           export_ts: "2025-11-01 12:00:00"
         }
     
+    overrides:
+      macros:
+        is_incremental: false
+
+  - name: test_stg_in_logins_changed_at_parsing
+    model: stg_in_logins
+
+    given:
+      - input: ref('raw_logins')
+        rows:
+          - {
+            id: "a1111111-0000-0000-0000-000000000001",
+            name: "Carol",
+            username: "carol@example.com",
+            changed_at: "10/10/2025 10:00:00",
+            strength: 60,
+            filename: "azure://password-dashboard/20251012154536/logins.csv"
+          }
+          - {
+            id: "b2222222-0000-0000-0000-000000000002",
+            name: "Dave",
+            username: "dave@example.com",
+            changed_at: "11/01/2025 08:30:00",
+            strength: 40,
+            filename: "azure://password-dashboard/20251101120000/logins.csv"
+          }
+
+    expect:
+      rows:
+        - {
+          id: "a1111111-0000-0000-0000-000000000001",
+          name: "Carol",
+          username: "carol@example.com",
+          changed_at: "2025-10-10 10:00:00",
+          strength: 60,
+          export_ts: "2025-10-12 15:45:36"
+        }
+        - {
+          id: "b2222222-0000-0000-0000-000000000002",
+          name: "Dave",
+          username: "dave@example.com",
+          changed_at: "2025-11-01 08:30:00",
+          strength: 40,
+          export_ts: "2025-11-01 12:00:00"
+        }
+
     overrides:
       macros:
         is_incremental: false

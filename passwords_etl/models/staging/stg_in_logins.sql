@@ -6,7 +6,7 @@
 select id,
        name,
        username,
-       changed_at,
+       strptime(changed_at, '%m/%d/%Y %H:%M:%S') as changed_at,
        strength,
        strptime(
                regexp_extract(filename, '([0-9]{14})'),
