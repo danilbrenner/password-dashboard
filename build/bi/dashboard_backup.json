@@ -22,6 +22,19 @@
   "links": [],
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 9,
+      "panels": [],
+      "title": "Master Password",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
         "uid": "cf5akmw4fgruoe"
@@ -61,7 +74,7 @@
         "h": 2,
         "w": 10,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 5,
       "options": {
@@ -122,7 +135,7 @@
     {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
-        "uid": "cf5akmw4fgruoe"
+        "uid": "ff5l1op83hszka"
       },
       "fieldConfig": {
         "defaults": {
@@ -159,7 +172,7 @@
         "h": 3,
         "w": 7,
         "x": 10,
-        "y": 0
+        "y": 1
       },
       "id": 6,
       "options": {
@@ -190,7 +203,7 @@
           "editorMode": "code",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "with latest_session as (\n  select\n    session_type,\n    max(cast(export_ts as date)) as last_sync\n  from fact_exchange_sessions\n  group by session_type\n)\nselect \n  datediff('day', last_sync, current_date) as sync_age,\n  session_type as export_type\nfrom latest_session\norder by 1;",
+          "rawSql": "with latest_session as (\n  select\n    session_type,\n    max(cast(export_ts as date)) as last_sync\n  from fact_exchange_sessions\n  group by session_type\n)\nselect \n  datediff('day', last_sync, current_date) as sync_age,\n  session_type as export_type\nfrom latest_session\norder by session_type;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -216,9 +229,22 @@
       "type": "bargauge"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Logins",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
-        "uid": "cf5akmw4fgruoe"
+        "uid": "ff5l1op83hszka"
       },
       "fieldConfig": {
         "defaults": {
@@ -316,7 +342,7 @@
         "h": 7,
         "w": 5,
         "x": 0,
-        "y": 2
+        "y": 5
       },
       "id": 2,
       "options": {
@@ -351,7 +377,7 @@
           "editorMode": "code",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "select\n  CAST(sum(case when strength = 'VeryWeak'  then 1 else 0 end) AS INTEGER) as \"VeryWeak\",\n  CAST(sum(case when strength = 'Weak'      then 1 else 0 end) AS INTEGER) as \"Weak\",\n  CAST(sum(case when strength = 'Moderate'  then 1 else 0 end) AS INTEGER) as \"Moderate\",\n  CAST(sum(case when strength = 'Strong'    then 1 else 0 end) AS INTEGER) as \"Strong\",\n  CAST(sum(case when strength = 'VeryStrong'then 1 else 0 end) AS INTEGER) as \"VeryStrong\"\nfrom fact_login_passwords;",
+          "rawSql": "select\n  ifnull(cast(sum(case when lp.strength = 'VeryWeak'  then 1 else 0 end) AS INTEGER), 0) as \"VeryWeak\",\n  ifnull(cast(sum(case when lp.strength = 'Weak'      then 1 else 0 end) AS INTEGER), 0) as \"Weak\",\n  ifnull(cast(sum(case when lp.strength = 'Moderate'  then 1 else 0 end) AS INTEGER), 0) as \"Moderate\",\n  ifnull(cast(sum(case when lp.strength = 'Strong'    then 1 else 0 end) AS INTEGER), 0) as \"Strong\",\n  ifnull(cast(sum(case when lp.strength = 'VeryStrong'then 1 else 0 end) AS INTEGER), 0) as \"VeryStrong\"\nfrom fact_login_passwords lp;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -372,19 +398,178 @@
           }
         }
       ],
-      "title": "All Passwords strength",
-      "transparent": true,
+      "title": "All Password Strength",
       "type": "piechart"
     },
     {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
-        "uid": "cf5akmw4fgruoe"
+        "uid": "ff5l1op83hszka"
       },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "semi-dark-green",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VeryWeak"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Weak"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Moderate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#ededed",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Strong"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VeryStrong"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 5,
+        "y": 5
+      },
+      "id": 8,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "select\n    ifnull(cast(sum(case when datediff('month', changed_at, current_date) < 1              then 1 else 0 end) AS INTEGER), 0) as \"New\",\n    ifnull(cast(sum(case when datediff('month', changed_at, current_date) between 1 and 3  then 1 else 0 end) AS INTEGER), 0) as \"Recent\",\n    ifnull(cast(sum(case when datediff('month', changed_at, current_date) between 3 and 6  then 1 else 0 end) AS INTEGER), 0) as \"Moderate\",\n    ifnull(cast(sum(case when datediff('month', changed_at, current_date) between 6 and 12 then 1 else 0 end) AS INTEGER), 0) as \"Old\",\n    ifnull(cast(sum(case when datediff('month', changed_at, current_date) > 12             then 1 else 0 end) AS INTEGER), 0) as \"Ancient\"\nfrom fact_login_passwords lp",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "All Password Rotation Age",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "motherduck-duckdb-datasource",
+        "uid": "ff5l1op83hszka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-purple",
             "mode": "fixed"
           },
           "fieldMinMax": false,
@@ -404,8 +589,8 @@
       "gridPos": {
         "h": 12,
         "w": 5,
-        "x": 10,
-        "y": 3
+        "x": 12,
+        "y": 5
       },
       "id": 4,
       "options": {
@@ -460,6 +645,166 @@
       "title": "Number of passwords",
       "transparent": true,
       "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "motherduck-duckdb-datasource",
+        "uid": "ff5l1op83hszka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VeryWeak"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Weak"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Moderate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#ededed",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Strong"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VeryStrong"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 0,
+        "y": 12
+      },
+      "id": 7,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "select\n  ifnull(cast(sum(case when lp.strength = 'VeryWeak'  then 1 else 0 end) AS INTEGER), 0) as \"VeryWeak\",\n  ifnull(cast(sum(case when lp.strength = 'Weak'      then 1 else 0 end) AS INTEGER), 0) as \"Weak\",\n  ifnull(cast(sum(case when lp.strength = 'Moderate'  then 1 else 0 end) AS INTEGER), 0) as \"Moderate\",\n  ifnull(cast(sum(case when lp.strength = 'Strong'    then 1 else 0 end) AS INTEGER), 0) as \"Strong\",\n  ifnull(cast(sum(case when lp.strength = 'VeryStrong'then 1 else 0 end) AS INTEGER), 0) as \"VeryStrong\"\nfrom fact_login_passwords lp\nwhere exists(select 1 from important_passwords where login_id = lp.login_id);",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Important Password Strength",
+      "type": "piechart"
     }
   ],
   "preload": false,
@@ -476,5 +821,5 @@
   "timezone": "browser",
   "title": "Password dashboard",
   "uid": "adqb2xt",
-  "version": 42
+  "version": 15
 }
