@@ -31,8 +31,11 @@ RUN set -eux; \
 
 USER grafana
 
-# Allow loading the unsigned MotherDuck DuckDB datasource plugin
-ENV GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=motherduck-duckdb-datasource
+ENV GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=motherduck-duckdb-datasource \
+  GF_AUTH_ANONYMOUS_ENABLED=true \
+  GF_AUTH_ANONYMOUS_ORG_ROLE=Admin \
+  GF_AUTH_DISABLE_LOGIN_FORM=true \
+  GF_AUTH_DISABLE_SIGNOUT_MENU=true
 
 EXPOSE 3000
 
