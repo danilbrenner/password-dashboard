@@ -21,6 +21,8 @@ EXPOSE 3000
 
 WORKDIR /app/orchestration
 
+RUN pip install -e .
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
