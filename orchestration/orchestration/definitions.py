@@ -107,7 +107,7 @@ defs = Definitions(
     schedules=[
         ScheduleDefinition(
             name="nightly_materialization",
-            cron_schedule="0 19 * * *",
+            cron_schedule="0 */4 * * *",
             job=materialize_dbt_and_copy,
         )
     ],
