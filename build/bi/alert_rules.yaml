@@ -1,0 +1,188 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: 1m
+      folder: Alerts
+      interval: 1m
+      rules:
+        - uid: dfp1dwzp3bdhce
+          title: Data Freshness Check
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: bfp12uf7b9csga
+              model:
+                editorMode: code
+                format: 1
+                intervalMs: 1000
+                maxDataPoints: 43200
+                rawQuery: true
+                rawSql: |-
+                    with latest_session as (
+                      select
+                        session_type,
+                        max(cast(export_ts as date)) as last_sync
+                      from fact_exchange_sessions
+                      group by session_type
+                    )
+                    select count(*)
+                    from latest_session
+                    where datediff('day', last_sync, current_date) >= 7;
+                refId: A
+                sql:
+                    columns:
+                        - parameters: []
+                          type: function
+                    groupBy:
+                        - property:
+                            type: string
+                          type: groupBy
+                    limit: 50
+            - refId: B
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: count
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: count
+                refId: B
+                type: reduce
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          isPaused: false
+          notification_settings:
+            receiver: GrafanaTg
+        - uid: bfp1ei2c252wwb
+          title: Master Password Expiration Check
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: bfp12uf7b9csga
+              model:
+                editorMode: code
+                format: 1
+                intervalMs: 1000
+                maxDataPoints: 43200
+                rawQuery: true
+                rawSql: |-
+                    with master_password_age as (
+                      select datediff('days', latest_export_ts, current_date) as sync_age
+                      from fact_master_passwords
+                      order by latest_export_ts desc limit 1
+                    )
+                    select count(*) from master_password_age
+                    where sync_age > 180
+                refId: A
+                sql:
+                    columns:
+                        - parameters: []
+                          type: function
+                    groupBy:
+                        - property:
+                            type: string
+                          type: groupBy
+                    limit: 50
+            - refId: B
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: sum
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: sum
+                refId: B
+                type: reduce
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          isPaused: false
+          notification_settings:
+            receiver: GrafanaTg

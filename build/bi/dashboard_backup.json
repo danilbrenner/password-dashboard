@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -37,7 +37,7 @@
     {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
-        "uid": "cf5akmw4fgruoe"
+        "uid": "bfp12uf7b9csga"
       },
       "fieldConfig": {
         "defaults": {
@@ -101,13 +101,13 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.3.6",
       "targets": [
         {
           "editorMode": "code",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "select datediff('days', latest_export_ts, current_date) as sync_age\nfrom fact_master_passwords;",
+          "rawSql": "select datediff('days', latest_export_ts, current_date) as sync_age\nfrom fact_master_passwords\norder by latest_export_ts desc limit 1;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -135,7 +135,7 @@
     {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
-        "uid": "ff5l1op83hszka"
+        "uid": "bfp12uf7b9csga"
       },
       "fieldConfig": {
         "defaults": {
@@ -197,7 +197,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.3.6",
       "targets": [
         {
           "editorMode": "code",
@@ -244,7 +244,7 @@
     {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
-        "uid": "ff5l1op83hszka"
+        "uid": "bfp12uf7b9csga"
       },
       "fieldConfig": {
         "defaults": {
@@ -371,7 +371,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.3.6",
       "targets": [
         {
           "editorMode": "code",
@@ -404,7 +404,7 @@
     {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
-        "uid": "ff5l1op83hszka"
+        "uid": "bfp12uf7b9csga"
       },
       "fieldConfig": {
         "defaults": {
@@ -531,7 +531,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.3.6",
       "targets": [
         {
           "editorMode": "code",
@@ -564,7 +564,7 @@
     {
       "datasource": {
         "type": "motherduck-duckdb-datasource",
-        "uid": "ff5l1op83hszka"
+        "uid": "bfp12uf7b9csga"
       },
       "fieldConfig": {
         "defaults": {
@@ -615,7 +615,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.3.6",
       "targets": [
         {
           "editorMode": "code",
@@ -645,166 +645,6 @@
       "title": "Number of passwords",
       "transparent": true,
       "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "motherduck-duckdb-datasource",
-        "uid": "ff5l1op83hszka"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": []
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "VeryWeak"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Weak"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Moderate"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#ededed",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Strong"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "VeryStrong"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 5,
-        "x": 0,
-        "y": 12
-      },
-      "id": 7,
-      "options": {
-        "displayLabels": [],
-        "legend": {
-          "calcs": [],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "values": [
-            "value"
-          ]
-        },
-        "pieType": "donut",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "/.*/",
-          "values": false
-        },
-        "sort": "desc",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.3.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "format": 1,
-          "rawQuery": true,
-          "rawSql": "select\n  ifnull(cast(sum(case when lp.strength = 'VeryWeak'  then 1 else 0 end) AS INTEGER), 0) as \"VeryWeak\",\n  ifnull(cast(sum(case when lp.strength = 'Weak'      then 1 else 0 end) AS INTEGER), 0) as \"Weak\",\n  ifnull(cast(sum(case when lp.strength = 'Moderate'  then 1 else 0 end) AS INTEGER), 0) as \"Moderate\",\n  ifnull(cast(sum(case when lp.strength = 'Strong'    then 1 else 0 end) AS INTEGER), 0) as \"Strong\",\n  ifnull(cast(sum(case when lp.strength = 'VeryStrong'then 1 else 0 end) AS INTEGER), 0) as \"VeryStrong\"\nfrom fact_login_passwords lp\nwhere exists(select 1 from important_passwords where login_id = lp.login_id);",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "Important Password Strength",
-      "type": "piechart"
     }
   ],
   "preload": false,
@@ -821,5 +661,5 @@
   "timezone": "browser",
   "title": "Password dashboard",
   "uid": "adqb2xt",
-  "version": 15
+  "version": 3
 }
